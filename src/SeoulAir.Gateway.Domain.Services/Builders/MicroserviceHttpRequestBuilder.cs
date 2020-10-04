@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json;
 using static SeoulAir.Gateway.Domain.Resources.Strings;
 
-namespace SeoulAir.Gateway.Domain.Services
+namespace SeoulAir.Gateway.Domain.Services.Builders
 {
     public class MicroserviceHttpRequestBuilder : IMicroserviceHttpRequestBuilder
     {

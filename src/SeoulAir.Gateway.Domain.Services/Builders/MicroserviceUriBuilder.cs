@@ -7,7 +7,7 @@ using System.Collections.Specialized;
 using System.Text;
 using System.Web;
 
-namespace SeoulAir.Gateway.Domain.Services
+namespace SeoulAir.Gateway.Domain.Services.Builders
 {
     public class MicroserviceUriBuilder : IMicroserviceUriBuilder
     {
