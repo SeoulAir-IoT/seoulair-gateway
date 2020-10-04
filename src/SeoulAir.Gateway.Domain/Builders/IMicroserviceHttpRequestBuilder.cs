@@ -8,6 +8,7 @@ namespace SeoulAir.Gateway.Domain.Builders
         IMicroserviceHttpRequestBuilder UseUri(Uri uri);
         IMicroserviceHttpRequestBuilder UseHttpMethod(HttpMethod method);
         IMicroserviceHttpRequestBuilder UseRequestBody<TParameter>(TParameter parameter);
+        IMicroserviceHttpRequestBuilder Restart();
         HttpRequestMessage Build();
     }
 }

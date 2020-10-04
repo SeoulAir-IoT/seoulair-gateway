@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeoulAir.Gateway.Api.Configuration;
 using SeoulAir.Gateway.Api.Configuration.Extensions;
+using SeoulAir.Gateway.Domain.Services.Extensions;
 
 namespace SeoulAir.Gateway.Api
 {
@@ -19,7 +20,11 @@ namespace SeoulAir.Gateway.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
             services.AddControllers();
+
+            services.AddDomainServices();
 
             services.AddApplicationSettings(Configuration);
 

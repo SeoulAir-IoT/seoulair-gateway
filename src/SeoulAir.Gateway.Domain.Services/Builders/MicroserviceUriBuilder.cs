@@ -52,6 +52,15 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
             return builder.Uri;
         }
 
+        public IMicroserviceUriBuilder Restart()
+        {
+            _queryParameters.Clear();
+            Endpoint = default;
+            ControllerName = default;
+            MicroserviceUrlOptions = default;
+            return this;
+        }
+
         public IMicroserviceUriBuilder SetEndpoint(string endpoint)
         {
             if (endpoint == default)
@@ -86,8 +95,13 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
         {
             StringBuilder path = new StringBuilder("/");
             path.Append(ControllerName);
-            path.Append("/");
-            path.Append(Endpoint);
+
+            if (!string.IsNullOrEmpty(Endpoint))
+            {
+                path.Append("/");
+                path.Append(Endpoint);
+            }
+
             return path.ToString();
         }
 

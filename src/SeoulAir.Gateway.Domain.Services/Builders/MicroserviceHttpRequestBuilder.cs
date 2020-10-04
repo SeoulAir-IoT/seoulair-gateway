@@ -24,6 +24,14 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
             return message;
         }
 
+        public IMicroserviceHttpRequestBuilder Restart()
+        {
+            HttpMethod = default;
+            RequestBody = default;
+            RequestUri = default;
+            return this;
+        }
+
         public IMicroserviceHttpRequestBuilder UseHttpMethod(HttpMethod method)
         {
             if (method == default)

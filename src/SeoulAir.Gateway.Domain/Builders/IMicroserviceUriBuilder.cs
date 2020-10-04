@@ -9,6 +9,7 @@ namespace SeoulAir.Gateway.Domain.Builders
         IMicroserviceUriBuilder UseController(string controllerName);
         IMicroserviceUriBuilder SetEndpoint(string endpoint);
         IMicroserviceUriBuilder AddQueryPrameter<TParameter>(string parameterName, TParameter value);
+        IMicroserviceUriBuilder Restart();
         Uri Build();
     }
 }
