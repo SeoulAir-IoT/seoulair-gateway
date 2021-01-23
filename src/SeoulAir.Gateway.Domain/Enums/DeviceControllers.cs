@@ -4,9 +4,9 @@ namespace SeoulAir.Gateway.Domain.Enums
 {
     public enum DeviceControllers : byte
     {
-        [Description("api/Device")]
-        Device,
-        [Description("api/Parameters")]
-        Parameter,
+        [Description("api/AirQualitySensor")]
+        AirQualitySensor,
+        [Description("api/SignalLight")]
+        SignalLight,
     }
 }

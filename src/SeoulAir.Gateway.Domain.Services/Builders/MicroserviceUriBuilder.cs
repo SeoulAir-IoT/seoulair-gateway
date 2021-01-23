@@ -12,6 +12,7 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
     public class MicroserviceUriBuilder : IMicroserviceUriBuilder
     {
         private readonly Dictionary<string, string> _queryParameters;
+        private readonly List<string> _pathParameters;
         private string Endpoint;
         private string ControllerName;
         private MicroserviceUrlOptions MicroserviceUrlOptions;
@@ -19,6 +20,7 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
         public MicroserviceUriBuilder()
         {
             _queryParameters = new Dictionary<string, string>();
+            _pathParameters = new List<string>();
         }
 
         public MicroserviceUriBuilder(MicroserviceUrlOptions options) : this()
@@ -35,6 +37,16 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
                 throw new ArgumentNullException(nameof(value));
 
             _queryParameters.Add(parameterName, value.ToString());
+            return this;
+        }
+
+        public IMicroserviceUriBuilder AddPathParameter(string value)
+        {
+            if (value == default)
+                throw new ArgumentNullException(nameof(value));
+
+            _pathParameters.Add(value);
+
             return this;
         }
 
@@ -55,6 +67,7 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
         public IMicroserviceUriBuilder Restart()
         {
             _queryParameters.Clear();
+            _pathParameters.Clear();
             Endpoint = default;
             ControllerName = default;
             MicroserviceUrlOptions = default;
@@ -100,6 +113,12 @@ namespace SeoulAir.Gateway.Domain.Services.Builders
             {
                 path.Append("/");
                 path.Append(Endpoint);
+            }
+
+            foreach(string parameter in _pathParameters)
+            {
+                path.Append("/");
+                path.Append(parameter);
             }
 
             return path.ToString();

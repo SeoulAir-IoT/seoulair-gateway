@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    seoulair-gateway:
+        container_name: seoulair-gateway
+        restart: always
+        image: seoulair-gateway
+        network_mode: bridge
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        ports:
+            - 5700:5700
+        external_links:
+            - seoulair-device

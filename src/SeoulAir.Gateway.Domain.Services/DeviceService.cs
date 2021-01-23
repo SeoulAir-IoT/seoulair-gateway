@@ -26,16 +26,17 @@ namespace SeoulAir.Gateway.Domain.Services
             _options = options.Value;
         }
 
-        public async Task<HttpResponseMessage> GetParameters()
+        public async Task<HttpResponseMessage> StartDeviceAsync()
         {
             HttpResponseMessage response;
 
             _uriBuilder.Restart()
                 .UseMicroserviceUrlOptions(_options)
-                .UseController(DeviceControllers.Parameter.GetDescription());
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("TurnOn");
 
             var request = _requestBuilder.Restart()
-                .UseHttpMethod(HttpMethod.Get)
+                .UseHttpMethod(HttpMethod.Put)
                 .UseUri(_uriBuilder.Build())
                 .Build();
 
@@ -47,13 +48,37 @@ namespace SeoulAir.Gateway.Domain.Services
             return response;
         }
 
-        public async Task<HttpResponseMessage> IsOn()
+        public async Task<HttpResponseMessage> StopDeviceAsync()
         {
             HttpResponseMessage response;
 
             _uriBuilder.Restart()
                 .UseMicroserviceUrlOptions(_options)
-                .UseController(DeviceControllers.Device.GetDescription());
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("TurnOff");
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> IsDeviceOnAsync()
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("IsOn");
+                
 
             var request = _requestBuilder.Restart()
                 .UseHttpMethod(HttpMethod.Get)
@@ -68,19 +93,213 @@ namespace SeoulAir.Gateway.Domain.Services
             return response;
         }
 
-        public HttpResponseMessage StartDevice()
+        public async Task<HttpResponseMessage> GetDeviceParametersAsync()
         {
-            throw new System.NotImplementedException();
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("parameters");
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Get)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
         }
 
-        public HttpResponseMessage StopDevice()
+        public async Task<HttpResponseMessage> UpdateDeviceNameAsync(string name)
         {
-            throw new System.NotImplementedException();
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("parameters/name")
+                .AddPathParameter(name);
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+        
+        public async Task<HttpResponseMessage> UpdateDeviceDelayAsync(string delay)
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.AirQualitySensor.GetDescription())
+                .SetEndpoint("parameters/sendingDelayMs")
+                .AddPathParameter(delay);
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
         }
 
-        public HttpResponseMessage UpdateParameters()
+
+        public async Task<HttpResponseMessage> StartStationAsync()
         {
-            throw new System.NotImplementedException();
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("TurnOn");
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
         }
+
+        public async Task<HttpResponseMessage> StopStationAsync()
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("TurnOff");
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> IsStationOnAsync(string stationCode)
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("IsOn")
+                .AddPathParameter(stationCode);
+
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Get)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetSignalLightParametersAsync()
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("parameters");
+
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Get)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> GetStationColorAsync(string stationCode)
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("ActiveColor")
+                .AddPathParameter(stationCode);
+
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Get)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
+        public async Task<HttpResponseMessage> UpdateStationColorAsync(string stationCode, string color)
+        {
+            HttpResponseMessage response;
+
+            _uriBuilder.Restart()
+                .UseMicroserviceUrlOptions(_options)
+                .UseController(DeviceControllers.SignalLight.GetDescription())
+                .SetEndpoint("ActiveColor")
+                .AddPathParameter(stationCode)
+                .AddPathParameter(color);
+
+            var request = _requestBuilder.Restart()
+                .UseHttpMethod(HttpMethod.Put)
+                .UseUri(_uriBuilder.Build())
+                .Build();
+
+            using (var client = _clientFactory.CreateClient())
+            {
+                response = await client.SendAsync(request);
+            }
+
+            return response;
+        }
+
     }
 }
