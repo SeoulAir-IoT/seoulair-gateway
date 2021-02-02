@@ -22,5 +22,5 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
 WORKDIR /app
 
 COPY --from=build /app/src/SeoulAir.Gateway.Api/out ./
-ENV ASPNETCORE_URLS=http://+:5700
+ENV ASPNETCORE_URLS=http://+:5900
 ENTRYPOINT ["dotnet","SeoulAir.Gateway.Api.dll"]

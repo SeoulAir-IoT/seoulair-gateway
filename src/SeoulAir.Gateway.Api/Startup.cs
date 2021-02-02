@@ -22,6 +22,16 @@ namespace SeoulAir.Gateway.Api
         {
             services.AddHttpClient();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SeoulAirPolicy", builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200", "127.0.0.1");
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
 
             services.AddDomainServices();
@@ -43,6 +53,8 @@ namespace SeoulAir.Gateway.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("SeoulAirPolicy");
 
             app.UseAuthorization();
 

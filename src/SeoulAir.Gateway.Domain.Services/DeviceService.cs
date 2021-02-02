@@ -138,7 +138,7 @@ namespace SeoulAir.Gateway.Domain.Services
             return response;
         }
         
-        public async Task<HttpResponseMessage> UpdateDeviceDelayAsync(string delay)
+        public async Task<HttpResponseMessage> UpdateDeviceDelayAsync(string sendingDelayMs)
         {
             HttpResponseMessage response;
 
@@ -146,7 +146,7 @@ namespace SeoulAir.Gateway.Domain.Services
                 .UseMicroserviceUrlOptions(_options)
                 .UseController(DeviceControllers.AirQualitySensor.GetDescription())
                 .SetEndpoint("parameters/sendingDelayMs")
-                .AddPathParameter(delay);
+                .AddPathParameter(sendingDelayMs);
 
             var request = _requestBuilder.Restart()
                 .UseHttpMethod(HttpMethod.Put)
@@ -162,14 +162,15 @@ namespace SeoulAir.Gateway.Domain.Services
         }
 
 
-        public async Task<HttpResponseMessage> StartStationAsync()
+        public async Task<HttpResponseMessage> StartStationAsync(string stationCode)
         {
             HttpResponseMessage response;
 
             _uriBuilder.Restart()
                 .UseMicroserviceUrlOptions(_options)
                 .UseController(DeviceControllers.SignalLight.GetDescription())
-                .SetEndpoint("TurnOn");
+                .SetEndpoint("TurnOn")
+				.AddPathParameter(stationCode);
 
             var request = _requestBuilder.Restart()
                 .UseHttpMethod(HttpMethod.Put)
@@ -184,14 +185,15 @@ namespace SeoulAir.Gateway.Domain.Services
             return response;
         }
 
-        public async Task<HttpResponseMessage> StopStationAsync()
+        public async Task<HttpResponseMessage> StopStationAsync(string stationCode)
         {
             HttpResponseMessage response;
 
             _uriBuilder.Restart()
                 .UseMicroserviceUrlOptions(_options)
                 .UseController(DeviceControllers.SignalLight.GetDescription())
-                .SetEndpoint("TurnOff");
+                .SetEndpoint("TurnOff")
+				.AddPathParameter(stationCode);
 
             var request = _requestBuilder.Restart()
                 .UseHttpMethod(HttpMethod.Put)

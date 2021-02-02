@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using SeoulAir.Gateway.Domain;
 using System.Net.Http;
 using System.Text.Json;
@@ -8,6 +9,7 @@ namespace SeoulAir.Gateway.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [EnableCors("SeoulAirPolicy")]
     public class DeviceController : ControllerBase
     {
         private readonly IDeviceService _deviceService;
@@ -22,22 +24,14 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> StartDeviceAsync()
         {
             HttpResponseMessage response = await _deviceService.StartDeviceAsync();
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            return StatusCode((int)response.StatusCode);
         }
 
         [HttpPut("AirQualitySensor/TurnOff")]
         public async Task<IActionResult> StopDeviceAsync()
         {
             HttpResponseMessage response = await _deviceService.StopDeviceAsync();
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            return StatusCode((int)response.StatusCode);
         }
 
         [HttpGet("AirQualitySensor/IsOn")]
@@ -62,7 +56,7 @@ namespace SeoulAir.Gateway.Api.Controllers
             return result;
         }
 
-        [HttpPut("AirQualitySensor/parametars/name")]
+        [HttpPut("AirQualitySensor/parameters/name/{name}")]
         public async Task<IActionResult> UpdateDeviceNameAsync(string name)
         {
             HttpResponseMessage response = await _deviceService.UpdateDeviceNameAsync(name);
@@ -73,10 +67,10 @@ namespace SeoulAir.Gateway.Api.Controllers
             return result;
         }
 
-        [HttpPut("AirQualitySensor/parametars/sendingDelayMs")]
-        public async Task<IActionResult> UpdateDeviceDelayAsync(string delay)
+        [HttpPut("AirQualitySensor/parameters/sendingDelayMs/{sendingDelayMs}")]
+        public async Task<IActionResult> UpdateDeviceDelayAsync(string sendingDelayMs)
         {
-            HttpResponseMessage response = await _deviceService.UpdateDeviceDelayAsync(delay);
+            HttpResponseMessage response = await _deviceService.UpdateDeviceDelayAsync(sendingDelayMs);
 
             string contentAsString = await response.Content.ReadAsStringAsync();
             ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
@@ -85,29 +79,21 @@ namespace SeoulAir.Gateway.Api.Controllers
         }
 
 
-        [HttpPut("SignalLight/TurnOn")]
-        public async Task<IActionResult> StartStationAsync()
+        [HttpPut("SignalLight/TurnOn/{stationCode}")]
+        public async Task<IActionResult> StartStationAsync(string stationCode)
         {
-            HttpResponseMessage response = await _deviceService.StartStationAsync();
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            HttpResponseMessage response = await _deviceService.StartStationAsync(stationCode);
+            return StatusCode((int)response.StatusCode);
         }
 
-        [HttpPut("SignalLight/TurnOff")]
-        public async Task<IActionResult> StopStationAsync()
+        [HttpPut("SignalLight/TurnOff/{stationCode}")]
+        public async Task<IActionResult> StopStationAsync(string stationCode)
         {
-            HttpResponseMessage response = await _deviceService.StopStationAsync();
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            HttpResponseMessage response = await _deviceService.StopStationAsync(stationCode);
+            return StatusCode((int)response.StatusCode);
         }
 
-        [HttpGet("SignalLight/IsOn")]
+        [HttpGet("SignalLight/IsOn/{stationCode}")]
         public async Task<IActionResult> IsStationOnAsync(string stationCode)
         {
             HttpResponseMessage response = await _deviceService.IsStationOnAsync(stationCode);
@@ -118,7 +104,7 @@ namespace SeoulAir.Gateway.Api.Controllers
             return result;
         }
 
-        [HttpGet("SignalLight/parametars")]
+        [HttpGet("SignalLight/parameters")]
         public async Task<IActionResult> GetSignalLightParametersAsync()
         {
             HttpResponseMessage response = await _deviceService.GetSignalLightParametersAsync();
@@ -129,7 +115,7 @@ namespace SeoulAir.Gateway.Api.Controllers
             return result;
         }
 
-        [HttpGet("SignalLight/ActiveColor")]
+        [HttpGet("SignalLight/ActiveColor/{stationCode}")]
         public async Task<IActionResult> GetStationColorAsync(string stationCode)
         {
             HttpResponseMessage response = await _deviceService.GetStationColorAsync(stationCode);
@@ -140,7 +126,7 @@ namespace SeoulAir.Gateway.Api.Controllers
             return result;
         }
 
-        [HttpPut("SignalLight/ActiveColor")]
+        [HttpPut("SignalLight/ActiveColor/{stationCode}/{color}")]
         public async Task<IActionResult> UpdateStationColorAsync(string stationCode, string color)
         {
             HttpResponseMessage response = await _deviceService.UpdateStationColorAsync(stationCode, color);
