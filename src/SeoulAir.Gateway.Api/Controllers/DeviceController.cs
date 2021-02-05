@@ -38,9 +38,7 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> IsDeviceOnAsync()
         {
             HttpResponseMessage response = await _deviceService.IsDeviceOnAsync();
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
+            ObjectResult result = new ObjectResult(await response.Content.ReadAsStringAsync());
             result.StatusCode = (int)response.StatusCode;
             return result;
         }
@@ -60,22 +58,14 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> UpdateDeviceNameAsync(string name)
         {
             HttpResponseMessage response = await _deviceService.UpdateDeviceNameAsync(name);
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            return StatusCode((int)response.StatusCode);
         }
 
         [HttpPut("AirQualitySensor/parameters/sendingDelayMs/{sendingDelayMs}")]
         public async Task<IActionResult> UpdateDeviceDelayAsync(string sendingDelayMs)
         {
             HttpResponseMessage response = await _deviceService.UpdateDeviceDelayAsync(sendingDelayMs);
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            return StatusCode((int)response.StatusCode);
         }
 
 
@@ -97,9 +87,7 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> IsStationOnAsync(string stationCode)
         {
             HttpResponseMessage response = await _deviceService.IsStationOnAsync(stationCode);
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
+            ObjectResult result = new ObjectResult(await response.Content.ReadAsStringAsync());
             result.StatusCode = (int)response.StatusCode;
             return result;
         }
@@ -119,9 +107,7 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> GetStationColorAsync(string stationCode)
         {
             HttpResponseMessage response = await _deviceService.GetStationColorAsync(stationCode);
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
+            ObjectResult result = new ObjectResult(await response.Content.ReadAsStringAsync());
             result.StatusCode = (int)response.StatusCode;
             return result;
         }
@@ -130,11 +116,7 @@ namespace SeoulAir.Gateway.Api.Controllers
         public async Task<IActionResult> UpdateStationColorAsync(string stationCode, string color)
         {
             HttpResponseMessage response = await _deviceService.UpdateStationColorAsync(stationCode, color);
-
-            string contentAsString = await response.Content.ReadAsStringAsync();
-            ObjectResult result = new ObjectResult(JsonSerializer.Deserialize<object>(contentAsString));
-            result.StatusCode = (int)response.StatusCode;
-            return result;
+            return StatusCode((int)response.StatusCode);
         }
 
     }
