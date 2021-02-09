@@ -14,7 +14,6 @@ namespace SeoulAir.Gateway.Api.Configuration.Extensions
             return services;
         }
 
-
         public static IServiceCollection AddApplicationSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<SeoulAirAnalyticsOptions>(

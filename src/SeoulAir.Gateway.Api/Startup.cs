@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SeoulAir.Gateway.Api.Configuration;
 using SeoulAir.Gateway.Api.Configuration.Extensions;
+using SeoulAir.Gateway.Domain.Services.Extensions;
 
 namespace SeoulAir.Gateway.Api
 {
@@ -19,7 +20,21 @@ namespace SeoulAir.Gateway.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("SeoulAirPolicy", builder =>
+                    {
+                        builder.WithOrigins("http://localhost:4200", "127.0.0.1");
+                        builder.AllowAnyMethod();
+                        builder.AllowAnyHeader();
+                    });
+            });
+
             services.AddControllers();
+
+            services.AddDomainServices();
 
             services.AddApplicationSettings(Configuration);
 
@@ -38,6 +53,8 @@ namespace SeoulAir.Gateway.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("SeoulAirPolicy");
 
             app.UseAuthorization();
 
